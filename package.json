@@ -1,0 +1,25 @@
+{
+  "name": "check-parser-ts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "ts-node": "^10.9.2"
+  },
+  "dependencies": {
+    "@google-cloud/documentai": "^8.11.0",
+    "@google-cloud/firestore": "^7.10.0",
+    "@google-cloud/functions-framework": "^3.4.2",
+    "@google-cloud/storage": "^7.13.0",
+    "canvas": "^2.11.2",
+    "dotenv": "^16.4.5",
+    "faker": "^6.6.6"
+  }
+}
