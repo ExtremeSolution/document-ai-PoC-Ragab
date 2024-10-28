@@ -7,3 +7,8 @@ export type CheckDataType = {
   payer_name: string;
   isCancelled: boolean;
 };
+
+export type LocalMetadataType = {
+  contentType: string;
+  name: string;
+};

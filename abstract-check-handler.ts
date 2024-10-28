@@ -1,6 +1,6 @@
 import {DocumentProcessorServiceClient} from "@google-cloud/documentai";
 import {FileMetadata} from "@google-cloud/storage";
-import {CheckDataType} from "./types";
+import {CheckDataType, LocalMetadataType} from "./types";
 
 export abstract class CheckHandler {
   protected nextHandler: CheckHandler;
@@ -11,18 +11,12 @@ export abstract class CheckHandler {
   }
 
   handle(
+    fileMetaData: LocalMetadataType,
     documentaiClient: DocumentProcessorServiceClient,
-    fileBuffer: Buffer,
-    fileMetadata: FileMetadata[],
     checkData: CheckDataType
   ) {
     if (this.nextHandler) {
-      return this.nextHandler.handle(
-        documentaiClient,
-        fileBuffer,
-        fileMetadata,
-        checkData
-      );
+      return this.nextHandler.handle(fileMetaData, documentaiClient, checkData);
     }
     return null;
   }

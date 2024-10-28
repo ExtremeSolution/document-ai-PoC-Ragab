@@ -1,26 +1,21 @@
 import {DocumentProcessorServiceClient} from "@google-cloud/documentai";
 import {FileMetadata} from "@google-cloud/storage";
-import {CheckDataType} from "./types";
-import {Firestore} from "@google-cloud/firestore";
 import {CheckHandler} from "./abstract-check-handler";
+import {CheckDataType, LocalMetadataType} from "./types";
 class ImageValidationHandler extends CheckHandler {
   handle(
+    fileMetaData: LocalMetadataType,
     documentaiClient: DocumentProcessorServiceClient,
-    fileBuffer: Buffer,
-    fileMetadata: FileMetadata[],
     checkData: CheckDataType
   ) {
     console.log("trying to validate the file to validate the image");
-    if (!this.isImage(fileMetadata)) {
+    if (!this.isImage(fileMetaData.contentType)) {
       throw new Error("File is not an image");
     }
-    return super.handle(documentaiClient, fileBuffer, fileMetadata, checkData);
+    return super.handle(fileMetaData, documentaiClient, checkData);
   }
-  isImage(fileMetadata: FileMetadata[]): boolean {
-    return (
-      fileMetadata?.length &&
-      fileMetadata[0].contentType?.split("/")[0] === "image"
-    );
+  isImage(contentType: string): boolean {
+    return contentType.startsWith("image");
   }
 }
 

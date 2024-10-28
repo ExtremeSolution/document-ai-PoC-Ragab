@@ -1,5 +1,5 @@
 import {Firestore} from "@google-cloud/firestore";
-import {CheckDataType} from "./types";
+import {CheckDataType, LocalMetadataType} from "./types";
 import {DocumentProcessorServiceClient} from "@google-cloud/documentai";
 import {FileMetadata} from "@google-cloud/storage";
 import {CheckHandler} from "./abstract-check-handler";
@@ -10,9 +10,8 @@ export class FirestoreSaveHandler extends CheckHandler {
     projectId: process.env.PROJECT_ID,
   });
   async handle(
+    fileMetaData: LocalMetadataType,
     documentaiClient: DocumentProcessorServiceClient,
-    fileBuffer: Buffer,
-    fileMetadata: FileMetadata[],
     checkData: CheckDataType
   ) {
     console.log("Saving to Firestore");
@@ -23,7 +22,7 @@ export class FirestoreSaveHandler extends CheckHandler {
     checkData = this.replaceUndefinedWithNull(checkData);
     await docRef.set(checkData);
 
-    return super.handle(documentaiClient, fileBuffer, fileMetadata, checkData);
+    return super.handle(fileMetaData, documentaiClient, checkData);
   }
   private replaceUndefinedWithNull(checkData: CheckDataType): CheckDataType {
     return Object.fromEntries(

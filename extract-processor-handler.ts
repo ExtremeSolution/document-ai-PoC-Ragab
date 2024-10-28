@@ -1,7 +1,7 @@
 import {DocumentProcessorServiceClient} from "@google-cloud/documentai";
 import {CheckHandler} from "./abstract-check-handler";
 import {FileMetadata} from "@google-cloud/storage";
-import {CheckDataType} from "./types";
+import {CheckDataType, LocalMetadataType} from "./types";
 
 export class ExtractorProcessorHandler extends CheckHandler {
   checkFields = [
@@ -12,29 +12,32 @@ export class ExtractorProcessorHandler extends CheckHandler {
     "payer_name",
   ] as const;
   async handle(
+    fileMetaData: LocalMetadataType,
     documentaiClient: DocumentProcessorServiceClient,
-    fileBuffer: Buffer,
-    fileMetadata: FileMetadata[],
     checkData: CheckDataType
   ) {
     if (checkData.isCancelled)
-      return super.handle(
-        documentaiClient,
-        fileBuffer,
-        fileMetadata,
-        checkData
-      );
-    console.log("trying to process the extract processor");
+      return super.handle(fileMetaData, documentaiClient, checkData);
 
+    console.log("trying to process the extract processor");
     const processorName = `projects/${process.env.PROJECT_ID}/locations/${process.env.PROJECT_LOCATION}/processors/${process.env.EXTRACT_PROCESSOR_ID}`;
-    const request = {
+
+    // const request = {
+    //   name: processorName,
+
+    //   rawDocument: {
+    //     content: fileBuffer,
+    //     mimeType: fileMetadata[0].contentType,
+    //   },
+    // };
+
+    const result = await documentaiClient.processDocument({
       name: processorName,
-      rawDocument: {
-        content: fileBuffer,
-        mimeType: fileMetadata[0].contentType,
+      gcsDocument: {
+        gcsUri: `gs://${process.env.GCP_BUCKET}/${fileMetaData.name}`,
+        mimeType: fileMetaData.contentType,
       },
-    };
-    const result = await documentaiClient.processDocument(request);
+    });
     console.log("get the result from the extract processor");
 
     for (let entity of result[0]?.document?.entities) {
@@ -50,6 +53,6 @@ export class ExtractorProcessorHandler extends CheckHandler {
       }
     }
 
-    return super.handle(documentaiClient, fileBuffer, fileMetadata, checkData);
+    return super.handle(fileMetaData, documentaiClient, checkData);
   }
 }
