@@ -1,10 +1,11 @@
 export type CheckDataType = {
   id: string;
-  check_number: number;
+  check_number: string;
   check_mount: number;
   currency: string;
   date: string;
-  payer_name: string;
+  pay_to: string;
+  pay_from;
   isCancelled: boolean;
 };
 

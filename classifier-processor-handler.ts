@@ -12,13 +12,7 @@ export class ClassifierProcessorHandler extends CheckHandler {
   ) {
     try {
       const processorName = `projects/${process.env.PROJECT_ID}/locations/${process.env.PROJECT_LOCATION}/processors/9e2b9c4a2d83618a/processorVersions/${process.env.CLASSIFIER_PROCESSOR_VERSION_ID}`;
-      // const request = {
-      //   name: processorName,
-      //   rawDocument: {
-      //     content: fileBuffer,
-      //     mimeType: fileMetadata[0].contentType,
-      //   },
-      // };
+
       console.log("trying to process the classifier processor");
       const result = await documentaiClient.processDocument({
         name: processorName,

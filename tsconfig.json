@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es6", // Specifies ECMAScript target version (es5, es6, es2020, etc.)
     "module": "commonjs", // Specifies the module code generation (commonjs, es6, etc.)
-    "outDir": ".", // Output directory for the compiled files
+    "outDir": "./dist", // Output directory for the compiled files
     "rootDir": ".", // Root directory for TypeScript source files
     "strict": false, // Enable strict type-checking options
     "esModuleInterop": true, // Ensures compatibility between CommonJS and ES Modules

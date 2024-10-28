@@ -1,6 +1,6 @@
 import {DocumentProcessorServiceClient} from "@google-cloud/documentai";
 import * as functions from "@google-cloud/functions-framework";
-import {File} from "@google-cloud/storage";
+import {File, Storage} from "@google-cloud/storage";
 import * as dotenv from "dotenv";
 dotenv.config();
 

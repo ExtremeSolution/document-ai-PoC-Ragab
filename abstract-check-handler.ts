@@ -1,5 +1,4 @@
 import {DocumentProcessorServiceClient} from "@google-cloud/documentai";
-import {FileMetadata} from "@google-cloud/storage";
 import {CheckDataType, LocalMetadataType} from "./types";
 
 export abstract class CheckHandler {

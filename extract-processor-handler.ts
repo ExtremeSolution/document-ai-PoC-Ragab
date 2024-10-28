@@ -1,6 +1,5 @@
 import {DocumentProcessorServiceClient} from "@google-cloud/documentai";
 import {CheckHandler} from "./abstract-check-handler";
-import {FileMetadata} from "@google-cloud/storage";
 import {CheckDataType, LocalMetadataType} from "./types";
 
 export class ExtractorProcessorHandler extends CheckHandler {
@@ -9,7 +8,8 @@ export class ExtractorProcessorHandler extends CheckHandler {
     "check_number",
     "currency",
     "date",
-    "payer_name",
+    "pay_to",
+    "pay_from",
   ] as const;
   async handle(
     fileMetaData: LocalMetadataType,
@@ -21,15 +21,9 @@ export class ExtractorProcessorHandler extends CheckHandler {
 
     console.log("trying to process the extract processor");
     const processorName = `projects/${process.env.PROJECT_ID}/locations/${process.env.PROJECT_LOCATION}/processors/${process.env.EXTRACT_PROCESSOR_ID}`;
-
-    // const request = {
-    //   name: processorName,
-
-    //   rawDocument: {
-    //     content: fileBuffer,
-    //     mimeType: fileMetadata[0].contentType,
-    //   },
-    // };
+    console.log("processorName== ", processorName);
+    console.log("fileMetaData.contentType== ", fileMetaData.contentType);
+    console.log("fileMetaData.name== ", fileMetaData.name);
 
     const result = await documentaiClient.processDocument({
       name: processorName,
@@ -47,7 +41,7 @@ export class ExtractorProcessorHandler extends CheckHandler {
       ) {
         checkData[entity.type] =
           entity.normalizedValue?.text || entity.mentionText;
-        if (["check_number", "check_mount"].includes(entity.type)) {
+        if (["check_mount"].includes(entity.type)) {
           checkData[entity.type] = +checkData[entity.type];
         }
       }
